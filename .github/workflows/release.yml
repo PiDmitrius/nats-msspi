@@ -53,7 +53,7 @@ jobs:
         if [ "$RUNNER_OS" != "Windows" ]; then
           make -B static-capix
         fi
-        cp -rf $RUNNER_TEMP/go/src $GOROOT
+        cp -rf "$RUNNER_TEMP/go/src" "$(go env GOROOT)"
 
     - name: Build legacy Debian 9 image
       if: ${{ matrix.legacy == 'debian9' }}
