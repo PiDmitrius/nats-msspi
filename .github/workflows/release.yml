@@ -1,5 +1,7 @@
 name: Release
-on: push
+on:
+  push:
+  workflow_dispatch:
 
 env:
   golang-version: '1.26.4'
