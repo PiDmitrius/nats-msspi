@@ -2,10 +2,10 @@ name: Release
 on: push
 
 env:
-  golang-version: '1.22.12'
-  go-cpro-version: 'v1.22.12-msspi-1'
-  nats-server-version: 'v2.10.25'
-  nats-streaming-server-version: 'v0.25.6-20250205'
+  golang-version: '1.26.4'
+  go-cpro-version: 'v1.26.4-msspi-1'
+  nats-server-version: 'v2.12.11'
+  nats-streaming-server-version: 'v0.25.6-20260616'
 
 jobs:
   test:
@@ -30,8 +30,8 @@ jobs:
 
     name: Setup
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-go@v2
+    - uses: actions/checkout@v4
+    - uses: actions/setup-go@v5
       if: ${{ matrix.legacy != 'debian9' }}
       with:
         go-version: ${{ env.golang-version }}
@@ -63,7 +63,7 @@ jobs:
           - <<'EOF'
         FROM debian:9
 
-        ARG GO_VERSION=1.22.12
+        ARG GO_VERSION=1.26.4
 
         RUN printf '%s\n' \
               'deb http://archive.debian.org/debian stretch main' \
@@ -139,7 +139,7 @@ jobs:
             }
 
             build_project nats-io nats-server "${NATS_SERVER_VERSION}"
-            build_project CryptoPro nats-streaming-server "${NATS_STREAMING_SERVER_VERSION}"
+            build_project PiDmitrius nats-streaming-server "${NATS_STREAMING_SERVER_VERSION}"
           '
 
     - name: Build nats-server
@@ -181,7 +181,7 @@ jobs:
         AEXT: ${{ matrix.aext }}
       shell: bash
       run: |
-        git -c advice.detachedHead=false clone --depth 1 --branch ${PROJECTTAG} https://github.com/CryptoPro/${PROJECTNAME}.git
+        git -c advice.detachedHead=false clone --depth 1 --branch ${PROJECTTAG} https://github.com/PiDmitrius/${PROJECTNAME}.git
         cd ${PROJECTNAME}
         go build -v
         if [ "$RUNNER_OS" == "Windows" ]; then
@@ -203,7 +203,7 @@ jobs:
         fi
 
     - name: Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
