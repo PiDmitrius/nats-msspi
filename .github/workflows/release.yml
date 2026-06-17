@@ -1,11 +1,13 @@
 name: Release
-on: push
+on:
+  push:
+  workflow_dispatch:
 
 env:
-  golang-version: '1.22.12'
-  go-cpro-version: 'v1.22.12-msspi-1'
-  nats-server-version: 'v2.10.25'
-  nats-streaming-server-version: 'v0.25.6-20250205'
+  golang-version: '1.26.4'
+  go-cpro-version: 'v1.26.4-msspi-1'
+  nats-server-version: 'v2.12.11'
+  nats-streaming-server-version: 'v0.25.6-20260617'
 
 jobs:
   test:
@@ -30,11 +32,12 @@ jobs:
 
     name: Setup
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-go@v2
+    - uses: actions/checkout@v6
+    - uses: actions/setup-go@v6
       if: ${{ matrix.legacy != 'debian9' }}
       with:
         go-version: ${{ env.golang-version }}
+        cache: false
 
     - name: Setup CryptoPro/go
       if: ${{ matrix.legacy != 'debian9' }}
@@ -51,7 +54,7 @@ jobs:
         if [ "$RUNNER_OS" != "Windows" ]; then
           make -B static-capix
         fi
-        cp -rf $RUNNER_TEMP/go/src $GOROOT
+        cp -rf "$RUNNER_TEMP/go/src" "$(go env GOROOT)"
 
     - name: Build legacy Debian 9 image
       if: ${{ matrix.legacy == 'debian9' }}
@@ -63,7 +66,7 @@ jobs:
           - <<'EOF'
         FROM debian:9
 
-        ARG GO_VERSION=1.22.12
+        ARG GO_VERSION=1.26.4
 
         RUN printf '%s\n' \
               'deb http://archive.debian.org/debian stretch main' \
@@ -203,7 +206,7 @@ jobs:
         fi
 
     - name: Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: |
