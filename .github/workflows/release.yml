@@ -32,11 +32,12 @@ jobs:
 
     name: Setup
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-go@v5
+    - uses: actions/checkout@v6
+    - uses: actions/setup-go@v6
       if: ${{ matrix.legacy != 'debian9' }}
       with:
         go-version: ${{ env.golang-version }}
+        cache: false
 
     - name: Setup CryptoPro/go
       if: ${{ matrix.legacy != 'debian9' }}
