@@ -141,7 +141,7 @@ jobs:
             }
 
             build_project nats-io nats-server "${NATS_SERVER_VERSION}"
-            build_project PiDmitrius nats-streaming-server "${NATS_STREAMING_SERVER_VERSION}"
+            build_project CryptoPro nats-streaming-server "${NATS_STREAMING_SERVER_VERSION}"
           '
 
     - name: Build nats-server
@@ -183,7 +183,7 @@ jobs:
         AEXT: ${{ matrix.aext }}
       shell: bash
       run: |
-        git -c advice.detachedHead=false clone --depth 1 --branch ${PROJECTTAG} https://github.com/PiDmitrius/${PROJECTNAME}.git
+        git -c advice.detachedHead=false clone --depth 1 --branch ${PROJECTTAG} https://github.com/CryptoPro/${PROJECTNAME}.git
         cd ${PROJECTNAME}
         go build -v
         if [ "$RUNNER_OS" == "Windows" ]; then
