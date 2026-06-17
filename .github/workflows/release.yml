@@ -7,7 +7,7 @@ env:
   golang-version: '1.26.4'
   go-cpro-version: 'v1.26.4-msspi-1'
   nats-server-version: 'v2.12.11'
-  nats-streaming-server-version: 'v0.25.6-20260616'
+  nats-streaming-server-version: 'v0.25.6-20260617'
 
 jobs:
   test:
